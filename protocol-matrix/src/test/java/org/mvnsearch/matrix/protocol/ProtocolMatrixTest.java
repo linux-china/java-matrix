@@ -2,9 +2,7 @@ package org.mvnsearch.matrix.protocol;
 
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.msgpack.MessagePack;
 
