@@ -10,6 +10,20 @@
     <artifactId>protocol-matrix</artifactId>
     <name>Protocol Matrix</name>
     <dependencies>
-
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
+            <version>4.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.msgpack</groupId>
+            <artifactId>msgpack</artifactId>
+            <version>0.6.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-lgpl</artifactId>
+            <version>1.9.10</version>
+        </dependency>
     </dependencies>
 </project>
