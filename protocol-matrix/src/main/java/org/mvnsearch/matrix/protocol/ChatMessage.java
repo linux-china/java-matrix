@@ -39,6 +39,10 @@ public class ChatMessage implements Serializable {
      */
     public Date createdAt;
     /**
+     * content length
+     */
+    public Integer contentLength;
+    /**
      * headers
      */
     public Map<String, String> headers = new HashMap<String, String>();
@@ -97,5 +101,13 @@ public class ChatMessage implements Serializable {
 
     public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
+    }
+
+    public Integer getContentLength() {
+        return contentLength;
+    }
+
+    public void setContentLength(Integer contentLength) {
+        this.contentLength = contentLength;
     }
 }
