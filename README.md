@@ -1,6 +1,6 @@
 Java Matrix
 ====================================
-Java Matrix for different technologies.
+Java Matrix for different technologies:
 
 * Protocol: such as json, hessian, messagepack etc
 * Json: such as Jackson, gson etc
