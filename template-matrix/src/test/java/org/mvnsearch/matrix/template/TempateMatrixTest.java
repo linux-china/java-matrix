@@ -2,12 +2,15 @@ package org.mvnsearch.matrix.template;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +30,10 @@ public class TempateMatrixTest extends TestCase {
      * velocity template
      */
     private org.apache.velocity.Template velocityTemplate = null;
+    /**
+     * freemarker template
+     */
+    private freemarker.template.Template freemarkerTemplate = null;
 
     /**
      * init logic
@@ -49,6 +56,11 @@ public class TempateMatrixTest extends TestCase {
         p.setProperty("output.encoding", "UTF-8");
         VelocityEngine engine = new VelocityEngine(p);
         this.velocityTemplate = engine.getTemplate("/template/demo.vm");
+        //freemarker
+        Configuration cfg = new Configuration();
+        cfg.setClassForTemplateLoading(this.getClass(), "/");
+        cfg.setObjectWrapper(new DefaultObjectWrapper());
+        this.freemarkerTemplate = cfg.getTemplate("template/demo.ftl");
     }
 
     /**
@@ -59,7 +71,7 @@ public class TempateMatrixTest extends TestCase {
     public void testSpike() throws Exception {
         Map<String, Object> context = constructContext();
         VelocityContext context2 = new VelocityContext(context);
-        System.out.println(handlebars(context));
+        System.out.println(freemarker(context));
     }
 
     /**
@@ -75,6 +87,7 @@ public class TempateMatrixTest extends TestCase {
         for (int i = 0; i < 10000; i++) {
             handlebars(context);
             velocity(context2);
+            freemarker(context);
         }
         System.out.println(count + " loop:");
         long start = System.currentTimeMillis();
@@ -88,7 +101,11 @@ public class TempateMatrixTest extends TestCase {
         }
         long end2 = System.currentTimeMillis();
         System.out.println("velocity:" + (end2 - end1));
-
+        for (int i = 0; i < count; i++) {
+            freemarker(context);
+        }
+        long end3 = System.currentTimeMillis();
+        System.out.println("freemarker:" + (end3 - end2));
     }
 
 
@@ -113,6 +130,19 @@ public class TempateMatrixTest extends TestCase {
     private String velocity(VelocityContext context) throws Exception {
         StringWriter writer = new StringWriter();
         velocityTemplate.merge(context, writer);
+        return writer.toString();
+    }
+
+    /**
+     * freemarker render
+     *
+     * @param context context
+     * @return output
+     * @throws Exception exception
+     */
+    private String freemarker(Map<String, Object> context) throws Exception {
+        StringWriter writer = new StringWriter();
+        freemarkerTemplate.process(context, writer);
         return writer.toString();
     }
 
