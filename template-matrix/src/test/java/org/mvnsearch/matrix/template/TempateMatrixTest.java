@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.perf4j.StopWatch;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -95,27 +96,31 @@ public class TempateMatrixTest extends TestCase {
             jad4j(context);
         }
         System.out.println(count + " loop");
-        long start = System.currentTimeMillis();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("handlebars");
         for (int i = 0; i < count; i++) {
             handlebars(context);
         }
-        long end1 = System.currentTimeMillis();
-        System.out.println("handlebars:" + (end1 - start));
+        stopWatch.stop("handlebars");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("velocity");
         for (int i = 0; i < count; i++) {
             velocity(context2);
         }
-        long end2 = System.currentTimeMillis();
-        System.out.println("velocity:" + (end2 - end1));
+        stopWatch.stop("velocity");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("freemarker");
         for (int i = 0; i < count; i++) {
             freemarker(context);
         }
-        long end3 = System.currentTimeMillis();
-        System.out.println("freemarker:" + (end3 - end2));
+        stopWatch.stop("freemarker");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("jade");
         for (int i = 0; i < count; i++) {
             jad4j(context);
         }
-        long end4 = System.currentTimeMillis();
-        System.out.println("jade:" + (end4 - end3));
+        stopWatch.stop("jade");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
     }
 
 
