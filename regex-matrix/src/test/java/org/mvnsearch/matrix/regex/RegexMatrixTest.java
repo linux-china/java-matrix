@@ -46,7 +46,6 @@ public class RegexMatrixTest extends TestCase {
      */
     public void testSpike() throws Exception {
         String email = "linux_china@hotmail.com";
-        System.out.println(oro(email));
     }
 
     /**
@@ -61,8 +60,9 @@ public class RegexMatrixTest extends TestCase {
         for (int i = 0; i < 10000; i++) {
             jdk(email);
             oro(email);
+            stringMatch(email);
         }
-        System.out.println(count + " loop:");
+        System.out.println(count + " loop");
         long start = System.currentTimeMillis();
         for (int i = 0; i < count; i++) {
             jdk(email);
@@ -74,6 +74,11 @@ public class RegexMatrixTest extends TestCase {
         }
         long end2 = System.currentTimeMillis();
         System.out.println("oro:" + (end2 - end1));
+        for (int i = 0; i < count; i++) {
+            stringMatch(email);
+        }
+        long end3 = System.currentTimeMillis();
+        System.out.println("string:" + (end3 - end2));
 
     }
 
@@ -85,9 +90,17 @@ public class RegexMatrixTest extends TestCase {
      */
     private boolean jdk(String text) {
         Matcher matcher = jdkRegexPattern.matcher(text);
-        boolean result = matcher.find();
-        matcher.group();
-        return result;
+        return matcher.matches();
+    }
+
+    /**
+     * string matched
+     *
+     * @param text text
+     * @return result
+     */
+    private boolean stringMatch(String text) {
+        return text.matches(emailPattern);
     }
 
     /**
