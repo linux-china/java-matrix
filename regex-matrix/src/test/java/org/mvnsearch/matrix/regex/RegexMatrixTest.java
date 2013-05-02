@@ -3,6 +3,9 @@ package org.mvnsearch.matrix.regex;
 import junit.framework.TestCase;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.jcodings.specific.UTF8Encoding;
+import org.joni.Option;
+import org.joni.Regex;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +24,10 @@ public class RegexMatrixTest extends TestCase {
      * jdk regex pattern
      */
     private Pattern jdkRegexPattern = Pattern.compile(emailPattern);
+    /**
+     * joni regex
+     */
+    Regex joniRegex = new Regex(emailPattern, UTF8Encoding.INSTANCE);
     /**
      * oro perl5 pattern
      */
@@ -45,7 +52,8 @@ public class RegexMatrixTest extends TestCase {
      * @throws Exception exception
      */
     public void testSpike() throws Exception {
-        String email = "linux_china@hotmail.com";
+        String email = "linux_chinahotmail.com";
+        System.out.println(joni(email));
     }
 
     /**
@@ -61,6 +69,7 @@ public class RegexMatrixTest extends TestCase {
             jdk(email);
             oro(email);
             stringMatch(email);
+            joni(email);
         }
         System.out.println(count + " loop");
         long start = System.currentTimeMillis();
@@ -79,6 +88,11 @@ public class RegexMatrixTest extends TestCase {
         }
         long end3 = System.currentTimeMillis();
         System.out.println("string:" + (end3 - end2));
+        for (int i = 0; i < count; i++) {
+            stringMatch(email);
+        }
+        long end4 = System.currentTimeMillis();
+        System.out.println("joni:" + (end4 - end3));
 
     }
 
@@ -114,5 +128,17 @@ public class RegexMatrixTest extends TestCase {
         boolean result = matcher.matches(text, oroPerl5Pattern);
         matcher.getMatch().group(0);
         return result;
+    }
+
+    /**
+     * joni
+     *
+     * @param text text
+     * @return matched mark
+     */
+    public boolean joni(String text) {
+        org.joni.Matcher matcher = joniRegex.matcher(text.getBytes());
+        int begin = matcher.search(0, text.getBytes().length, Option.NONE);
+        return begin > -1;
     }
 }
