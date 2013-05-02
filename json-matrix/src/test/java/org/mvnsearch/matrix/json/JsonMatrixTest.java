@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import junit.framework.TestCase;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.perf4j.StopWatch;
 
 import java.util.Date;
 
@@ -54,27 +55,31 @@ public class JsonMatrixTest extends TestCase {
             fastJson(msg);
         }
         System.out.println(count + " loop:");
-        long start = System.currentTimeMillis();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("jackson");
         for (int i = 0; i < count; i++) {
             jackson(msg);
         }
-        long end1 = System.currentTimeMillis();
-        System.out.println("jackson:" + (end1 - start));
+        stopWatch.stop("jackson");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("jackson2");
         for (int i = 0; i < count; i++) {
             jackson2(msg);
         }
-        long end2 = System.currentTimeMillis();
-        System.out.println("jackson2:" + (end2 - end1));
+        stopWatch.stop("jackson2");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("gson");
         for (int i = 0; i < count; i++) {
             gson(msg);
         }
-        long end3 = System.currentTimeMillis();
-        System.out.println("gson:" + (end3 - end2));
+        stopWatch.stop("gson");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("fastjson");
         for (int i = 0; i < count; i++) {
             fastJson(msg);
         }
-        long end4 = System.currentTimeMillis();
-        System.out.println("fastjson:" + (end4 - end3));
+        stopWatch.stop("fastjson");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
     }
 
     /**
