@@ -1,5 +1,6 @@
 package org.mvnsearch.matrix.json;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import junit.framework.TestCase;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -32,8 +33,9 @@ public class JsonMatrixTest extends TestCase {
      */
     public void testSpike() throws Exception {
         ChatMessage msg = constructMessage();
-        System.out.println("Jackson Content Length:" + jackson(msg).getContentLength());
-        System.out.println("Gson Content Length:" + gson(msg).getContentLength());
+        String json = JSON.toJSONString(msg);
+        ChatMessage chatMessage = JSON.parseObject(json, ChatMessage.class);
+        System.out.println(chatMessage.getBody());
     }
 
     /**
@@ -49,6 +51,7 @@ public class JsonMatrixTest extends TestCase {
             jackson(msg);
             jackson2(msg);
             gson(msg);
+            fastJson(msg);
         }
         System.out.println(count + " loop:");
         long start = System.currentTimeMillis();
@@ -67,6 +70,11 @@ public class JsonMatrixTest extends TestCase {
         }
         long end3 = System.currentTimeMillis();
         System.out.println("gson:" + (end3 - end2));
+        for (int i = 0; i < count; i++) {
+            fastJson(msg);
+        }
+        long end4 = System.currentTimeMillis();
+        System.out.println("fastjson:" + (end4 - end3));
     }
 
     /**
@@ -103,6 +111,18 @@ public class JsonMatrixTest extends TestCase {
     public ChatMessage gson(ChatMessage message) throws Exception {
         String json = gson.toJson(message);
         return gson.fromJson(json, ChatMessage.class);
+    }
+
+    /**
+     * fast json
+     *
+     * @param message chat message
+     * @return chat message
+     * @throws Exception exception
+     */
+    public ChatMessage fastJson(ChatMessage message) throws Exception {
+        String json = JSON.toJSONString(message);
+        return JSON.parseObject(json, ChatMessage.class);
     }
 
     /**
