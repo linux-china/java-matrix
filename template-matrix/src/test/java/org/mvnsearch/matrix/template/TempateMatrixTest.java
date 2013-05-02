@@ -46,7 +46,7 @@ public class TempateMatrixTest extends TestCase {
         //init handlebars
         String templateContent = IOUtils.toString(this.getClass().getResourceAsStream("/template/demo.hbs"));
         Handlebars handlebars = new Handlebars();
-        this.handlebarsTemplate = handlebars.compile(templateContent);
+        this.handlebarsTemplate = handlebars.compileInline(templateContent);
         //velocity
         Velocity.init();
         Properties p = new Properties();
@@ -89,7 +89,7 @@ public class TempateMatrixTest extends TestCase {
             velocity(context2);
             freemarker(context);
         }
-        System.out.println(count + " loop:");
+        System.out.println(count + " loop");
         long start = System.currentTimeMillis();
         for (int i = 0; i < count; i++) {
             handlebars(context);
