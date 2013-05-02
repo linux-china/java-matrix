@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.github.jknack</groupId>
             <artifactId>handlebars</artifactId>
-            <version>0.6.1</version>
+            <version>0.12.0</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -35,8 +35,19 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.0.7</version>
+            <version>1.0.11</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>de.neuland</groupId>
+            <artifactId>jade4j</artifactId>
+            <version>0.3.11</version>
+        </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>jade4j-releases</id>
+            <url>https://raw.github.com/neuland/jade4j/master/releases</url>
+        </repository>
+    </repositories>
 </project>
