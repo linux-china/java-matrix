@@ -5,6 +5,7 @@ import com.caucho.hessian.io.Hessian2Output;
 import junit.framework.TestCase;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.msgpack.MessagePack;
+import org.perf4j.StopWatch;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -58,27 +59,31 @@ public class ProtocolMatrixTest extends TestCase {
             msgpack(msg);
         }
         System.out.println(count + " loop:");
-        long start = System.currentTimeMillis();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("hessian");
         for (int i = 0; i < count; i++) {
             hessian(msg);
         }
-        long end1 = System.currentTimeMillis();
-        System.out.println("hessian:" + (end1 - start));
+        stopWatch.stop("hessian");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("jackson");
         for (int i = 0; i < count; i++) {
             jackson(msg);
         }
-        long end2 = System.currentTimeMillis();
-        System.out.println("jackson:" + (end2 - end1));
+        stopWatch.stop("jackson");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("msgpack");
         for (int i = 0; i < count; i++) {
             msgpack(msg);
         }
-        long end3 = System.currentTimeMillis();
-        System.out.println("msgpack:" + (end3 - end2));
+        stopWatch.stop("msgpack");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("jackson2");
         for (int i = 0; i < count; i++) {
             jackson2(msg);
         }
-        long end4 = System.currentTimeMillis();
-        System.out.println("jackson2:" + (end4 - end3));
+        stopWatch.stop("jackson2");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
 
     }
 
