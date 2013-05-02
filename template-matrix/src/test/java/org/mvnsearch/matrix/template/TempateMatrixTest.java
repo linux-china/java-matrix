@@ -2,6 +2,8 @@ package org.mvnsearch.matrix.template;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+import de.neuland.jade4j.Jade4J;
+import de.neuland.jade4j.template.JadeTemplate;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import junit.framework.TestCase;
@@ -10,7 +12,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 
-import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class TempateMatrixTest extends TestCase {
      * handlebars template
      */
     private Template handlebarsTemplate = null;
+    JadeTemplate jadeTemplate;
     /**
      * velocity template
      */
@@ -47,6 +49,8 @@ public class TempateMatrixTest extends TestCase {
         String templateContent = IOUtils.toString(this.getClass().getResourceAsStream("/template/demo.hbs"));
         Handlebars handlebars = new Handlebars();
         this.handlebarsTemplate = handlebars.compileInline(templateContent);
+        //jade4j
+        this.jadeTemplate = Jade4J.getTemplate("/Users/linux_china/github/java-matrix/template-matrix/src/test/resources/template/demo.jade");
         //velocity
         Velocity.init();
         Properties p = new Properties();
@@ -88,6 +92,7 @@ public class TempateMatrixTest extends TestCase {
             handlebars(context);
             velocity(context2);
             freemarker(context);
+            jad4j(context);
         }
         System.out.println(count + " loop");
         long start = System.currentTimeMillis();
@@ -106,6 +111,11 @@ public class TempateMatrixTest extends TestCase {
         }
         long end3 = System.currentTimeMillis();
         System.out.println("freemarker:" + (end3 - end2));
+        for (int i = 0; i < count; i++) {
+            jad4j(context);
+        }
+        long end4 = System.currentTimeMillis();
+        System.out.println("jade:" + (end4 - end3));
     }
 
 
@@ -144,6 +154,17 @@ public class TempateMatrixTest extends TestCase {
         StringWriter writer = new StringWriter();
         freemarkerTemplate.process(context, writer);
         return writer.toString();
+    }
+
+    /**
+     * jad4j render
+     *
+     * @param context context
+     * @return html code
+     * @throws Exception exception
+     */
+    private String jad4j(Map<String, Object> context) throws Exception {
+        return Jade4J.render(jadeTemplate, context);
     }
 
     /**
