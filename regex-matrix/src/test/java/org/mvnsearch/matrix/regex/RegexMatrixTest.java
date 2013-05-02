@@ -6,6 +6,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.jcodings.specific.UTF8Encoding;
 import org.joni.Option;
 import org.joni.Regex;
+import org.perf4j.StopWatch;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,27 +73,31 @@ public class RegexMatrixTest extends TestCase {
             joni(email);
         }
         System.out.println(count + " loop");
-        long start = System.currentTimeMillis();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("jdk");
         for (int i = 0; i < count; i++) {
             jdk(email);
         }
-        long end1 = System.currentTimeMillis();
-        System.out.println("jdk:" + (end1 - start));
+        stopWatch.stop("jdk");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("oro");
         for (int i = 0; i < count; i++) {
             oro(email);
         }
-        long end2 = System.currentTimeMillis();
-        System.out.println("oro:" + (end2 - end1));
+        stopWatch.stop("oro");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("String");
         for (int i = 0; i < count; i++) {
             stringMatch(email);
         }
-        long end3 = System.currentTimeMillis();
-        System.out.println("string:" + (end3 - end2));
+        stopWatch.stop("String");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
+        stopWatch.start("joni");
         for (int i = 0; i < count; i++) {
             stringMatch(email);
         }
-        long end4 = System.currentTimeMillis();
-        System.out.println("joni:" + (end4 - end3));
+        stopWatch.stop("joni");
+        System.out.println(stopWatch.getTag() + ":" + stopWatch.getElapsedTime());
 
     }
 
